@@ -3,7 +3,9 @@ import 'package:contatos_plus/app/view/contact_list.dart';
 import 'package:flutter/material.dart';
 
 class MyApp extends StatelessWidget {
+  // ignore: constant_identifier_names
   static const HOME = '/';
+  // ignore: constant_identifier_names
   static const CONTACT_FORM = 'contact-form';
 
   const MyApp({super.key});
