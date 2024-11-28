@@ -1,15 +1,13 @@
-import 'package:contatos_plus/app/database/connection.dart';
+import 'package:contatos_plus/app/domain/contact.dart';
+import 'package:contatos_plus/app/domain/contact_dao.dart';
 import 'package:contatos_plus/app/my_app.dart';
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
-import 'package:flutter_initicon/flutter_initicon.dart';
 
 class ContactList extends StatelessWidget {
   const ContactList({super.key});
 
-  Future<List<Map<String, dynamic>>> _buscar() async {
-    Database db = await Connection.get();
-    return db.query('contact');
+  Future<List<Contact>> _buscar() async {
+    return ContactDaoImpl().find();
   }
 
   @override
@@ -18,7 +16,7 @@ class ContactList extends StatelessWidget {
       future: _buscar(),
       builder: (context, futuro) {
         if (futuro.hasData) {
-          var lista = futuro.data ?? [];
+          List<Contact> lista = futuro.data ?? [];
           return Scaffold(
             appBar: AppBar(
               title: Text("Lista de contatos"),
@@ -42,28 +40,13 @@ class ContactList extends StatelessWidget {
               itemCount: lista.length,
               itemBuilder: (context, i) {
                 var contato = lista[i];
-                var avatarUrl = contato['avatar'] as String?;
-                var avatar = avatarUrl != null && avatarUrl.isNotEmpty
-                    ? CircleAvatar(
-                        backgroundImage: NetworkImage(contato['avatar']),
-                      )
-                    : const CircleAvatar(
-                        child: Icon(Icons.person),
-                      );
+                var circleAvatar = CircleAvatar(
+                    backgroundImage: NetworkImage(contato.urlAvatar));
+                var avatar = circleAvatar;
                 return ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: contato['url_avatar'] != null
-                        ? NetworkImage(contato['url_avatar'])
-                        : null,
-                    child: contato['url_avatar'] == null
-                        ? Initicon(
-                            text: "Nome completo",
-                            elevation: 4,
-                          )
-                        : null,
-                  ),
-                  title: Text(contato['nome'] ?? 'Sem nome'),
-                  subtitle: Text(contato['telefone'] ?? 'Sem telefone'),
+                  leading: avatar,
+                  title: Text(contato.nome),
+                  subtitle: Text(contato.telefone),
                   onTap: () {
                     // print("Contato selecionado com ID: ${contato['id']}");
                   },
