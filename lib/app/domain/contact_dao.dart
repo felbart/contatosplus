@@ -50,7 +50,7 @@ class ContactDaoImpl implements ContactDAO {
   @override
   save(Contact contact) async {
     _db = await Connection.get();
-    var sql;
+    String sql;
 
     if (contact.id == null) {
       sql =

@@ -1,3 +1,4 @@
+import 'package:contatos_plus/app/view/contact_details.dart';
 import 'package:contatos_plus/app/view/contact_form.dart';
 import 'package:contatos_plus/app/view/contact_list.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +8,9 @@ class MyApp extends StatelessWidget {
   static const HOME = '/';
   // ignore: constant_identifier_names
   static const CONTACT_FORM = 'contact-form';
+
+  // ignore: constant_identifier_names
+  static const CONTACT_DETAILS = 'contact_details';
 
   const MyApp({super.key});
 
@@ -26,6 +30,7 @@ class MyApp extends StatelessWidget {
       routes: {
         HOME: (context) => ContactList(),
         CONTACT_FORM: (context) => ContactForm(),
+        CONTACT_DETAILS: (context) => ContactDetails(),
       },
     );
   }
