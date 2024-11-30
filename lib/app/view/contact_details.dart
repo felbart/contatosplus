@@ -70,7 +70,7 @@ class ContactDetails extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        contato.email ?? 'Sem Email',
+                        contato.email,
                         style: const TextStyle(fontSize: 16),
                       ),
                       const SizedBox(height: 16),
