@@ -16,6 +16,8 @@ dependencies:
   sqflite: any
   path:
   flutter_initicon: any
+  mask_text_input_formatter: any
+
 
 dev_dependencies:
   flutter_test:
