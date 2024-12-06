@@ -1,18 +1,64 @@
+import 'dart:io';
+import 'package:contatos_plus/app/domain/contact.dart';
+import 'package:contatos_plus/app/database/db_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
+import 'package:brasil_fields/brasil_fields.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ContactForm extends StatefulWidget {
-  const ContactForm({super.key});
+  final Contact? contato;
+
+  const ContactForm({Key? key, this.contato}) : super(key: key);
 
   @override
   State<ContactForm> createState() => _ContactFormState();
 }
 
 class _ContactFormState extends State<ContactForm> {
-  final _formKey = GlobalKey<FormState>();
+  final _formKey =
+      GlobalKey<FormState>(); // Descomentei e ativei o uso da variável
+
   final _nomeController = TextEditingController();
   final _telefoneController = TextEditingController();
   final _emailController = TextEditingController();
+  File? _urlAvatar; // Variável para armazenar o avatar selecionado como arquivo
+
+  final ImagePicker _picker = ImagePicker();
+
+  @override
+  void initState() {
+    super.initState();
+
+    if (widget.contato != null) {
+      _nomeController.text = widget.contato!.nome;
+      _telefoneController.text = widget.contato!.telefone;
+      _emailController.text = widget.contato!.email;
+      _urlAvatar = File(widget.contato!.urlAvatar);
+    }
+  }
+
+  void _salvarContato() async {
+    final nome = _nomeController.text;
+    final telefone = _telefoneController.text;
+    final email = _emailController.text;
+    final urlAvatar = _urlAvatar?.path;
+
+    final contact = {
+      'id': widget.contato?.id,
+      'nome': nome,
+      'telefone': telefone,
+      'email': email,
+      'url_avatar': urlAvatar,
+    };
+
+    final dbHelper = DbHelper();
+    await dbHelper.insertContact(contact);
+
+    print('Contato salvo com sucesso');
+
+    Navigator.of(context).pop(true);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,32 +79,51 @@ class _ContactFormState extends State<ContactForm> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Form(
-          key: _formKey,
+          key: _formKey, // Integrando o _formKey no widget Form
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Center(
+                child: GestureDetector(
+                  onTap: _pickAvatar,
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundImage:
+                        _urlAvatar != null ? FileImage(_urlAvatar!) : null,
+                    child: _urlAvatar == null
+                        ? const Icon(Icons.camera_alt, size: 40)
+                        : null,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _nomeController,
                 decoration: const InputDecoration(labelText: 'Nome'),
                 textInputAction: TextInputAction.next,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Informe um nome para o contato.';
+                    return 'O nome é obrigatório.';
                   }
                   return null;
                 },
               ),
+              const SizedBox(height: 16),
               TextFormField(
                 controller: _telefoneController,
                 decoration: const InputDecoration(labelText: 'Telefone'),
                 keyboardType: TextInputType.phone,
                 textInputAction: TextInputAction.next,
+                inputFormatters: [
+                  FilteringTextInputFormatter.digitsOnly,
+                  TelefoneInputFormatter(),
+                ],
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Você deve informar um telefone.';
+                    return 'O telefone é obrigatório.';
                   }
-                  if (!RegExp(r'^\d+$').hasMatch(value)) {
-                    return 'Insira apenas números.';
+                  if (value.length < 14) {
+                    return 'Insira um número de telefone válido.';
                   }
                   return null;
                 },
@@ -74,7 +139,7 @@ class _ContactFormState extends State<ContactForm> {
                     return 'O e-mail é obrigatório.';
                   }
                   if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                    return 'Insira um email válido.';
+                    return 'Insira um e-mail válido.';
                   }
                   return null;
                 },
@@ -86,16 +151,13 @@ class _ContactFormState extends State<ContactForm> {
     );
   }
 
-  void _salvarContato() {
-    // Aqui você pode implementar a lógica para salvar os dados do contato
-    final nome = _nomeController.text;
-    final telefone = _telefoneController.text;
-    final email = _emailController.text;
+  Future<void> _pickAvatar() async {
+    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
 
-    // Exemplo de print para teste
-    print('Nome: $nome, Telefone: $telefone, Email: $email');
-
-    // Navega de volta após salvar
-    Navigator.of(context).pop();
+    if (pickedFile != null) {
+      setState(() {
+        _urlAvatar = File(pickedFile.path);
+      });
+    }
   }
 }

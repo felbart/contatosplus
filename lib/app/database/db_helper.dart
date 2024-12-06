@@ -1,3 +1,5 @@
+import 'package:contatos_plus/app/database/connection.dart';
+
 final createTable = '''
   CREATE TABLE contact (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -27,3 +29,26 @@ final insert4 = '''
   INSERT INTO contact (nome, telefone, email, url_avatar)
   VALUES ('Zé Filho', '(63) 9 8400-1122', 'zefilho@exemplo.com', 'https://cdn.pixabay.com/photo/2016/11/20/09/13/aged-man-1842327_1280.jpg')
 ''';
+
+class DbHelper {
+  Future<int> insertContact(Map<String, dynamic> contact) async {
+    final db = await Connection.get();
+    return await db.insert('contact', contact);
+  }
+
+  Future<List<Map<String, dynamic>>> getAllContacts() async {
+    final db = await Connection.get();
+    return await db.query('contact');
+  }
+
+  Future<int> updateContact(int id, Map<String, dynamic> contact) async {
+    final db = await Connection.get();
+    return await db
+        .update('contact', contact, where: 'id = ?', whereArgs: [id]);
+  }
+
+  Future<int> deleteContact(int id) async {
+    final db = await Connection.get();
+    return await db.delete('contact', where: 'id = ?', whereArgs: [id]);
+  }
+}

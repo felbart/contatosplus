@@ -15,8 +15,9 @@ dependencies:
   google_fonts: ^6.2.1
   sqflite: any
   path:
+  image_picker: ^0.8.7
   flutter_initicon: any
-  mask_text_input_formatter: any
+  brasil_fields: ^1.15.0
 
 
 dev_dependencies:
