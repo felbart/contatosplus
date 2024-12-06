@@ -9,7 +9,7 @@ import 'package:image_picker/image_picker.dart';
 class ContactForm extends StatefulWidget {
   final Contact? contato;
 
-  const ContactForm({Key? key, this.contato}) : super(key: key);
+  const ContactForm({super.key, this.contato});
 
   @override
   State<ContactForm> createState() => _ContactFormState();
