@@ -69,7 +69,6 @@ class ContactDaoImpl implements ContactDAO {
         contact.telefone,
         contact.email,
         contact.urlAvatar,
-        contact.id,
       ]);
     }
   }

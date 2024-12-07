@@ -9,20 +9,19 @@ import 'package:image_picker/image_picker.dart';
 class ContactForm extends StatefulWidget {
   final Contact? contato;
 
-  const ContactForm({Key? key, this.contato}) : super(key: key);
+  const ContactForm({super.key, this.contato});
 
   @override
   State<ContactForm> createState() => _ContactFormState();
 }
 
 class _ContactFormState extends State<ContactForm> {
-  final _formKey =
-      GlobalKey<FormState>(); // Descomentei e ativei o uso da variável
+  final _formKey = GlobalKey<FormState>();
 
   final _nomeController = TextEditingController();
   final _telefoneController = TextEditingController();
   final _emailController = TextEditingController();
-  File? _urlAvatar; // Variável para armazenar o avatar selecionado como arquivo
+  File? _urlAvatar;
 
   final ImagePicker _picker = ImagePicker();
 
@@ -42,7 +41,7 @@ class _ContactFormState extends State<ContactForm> {
     final nome = _nomeController.text;
     final telefone = _telefoneController.text;
     final email = _emailController.text;
-    final urlAvatar = _urlAvatar?.path;
+    final urlAvatar = _urlAvatar?.path ?? '';
 
     final contact = {
       'id': widget.contato?.id,
@@ -53,18 +52,33 @@ class _ContactFormState extends State<ContactForm> {
     };
 
     final dbHelper = DbHelper();
-    await dbHelper.insertContact(contact);
 
-    print('Contato salvo com sucesso');
+    if (widget.contato != null) {
+      await dbHelper.updateContact(contact);
+    } else {
+      await dbHelper.insertContact(contact);
+    }
 
     Navigator.of(context).pop(true);
+    print('Contato salvo com sucesso');
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Novo Contato'),
+        backgroundColor: Color.fromRGBO(37, 99, 235, 1),
+        titleTextStyle: TextStyle(
+          color: Colors.white,
+          fontSize: 24,
+        ),
+        iconTheme: IconThemeData(
+          color: Colors.white,
+          size: 24,
+        ),
+        title: const Text("Novo Contato"),
+        elevation: 2,
+        shadowColor: Colors.blueGrey,
         actions: [
           IconButton(
             icon: const Icon(Icons.save),

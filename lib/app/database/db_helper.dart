@@ -41,14 +41,22 @@ class DbHelper {
     return await db.query('contact');
   }
 
-  Future<int> updateContact(int id, Map<String, dynamic> contact) async {
+  Future<int> updateContact(Map<String, dynamic> contact) async {
     final db = await Connection.get();
-    return await db
-        .update('contact', contact, where: 'id = ?', whereArgs: [id]);
+    return await db.update(
+      'contact',
+      contact,
+      where: 'id = ?',
+      whereArgs: [contact['id']],
+    );
   }
 
   Future<int> deleteContact(int id) async {
     final db = await Connection.get();
-    return await db.delete('contact', where: 'id = ?', whereArgs: [id]);
+    return await db.delete(
+      'contact',
+      where: 'id = ?',
+      whereArgs: [id],
+    );
   }
 }
