@@ -62,19 +62,8 @@ class _ContactListState extends State<ContactList> {
 
         return Scaffold(
           appBar: AppBar(
-            backgroundColor: Color.fromRGBO(37, 99, 235, 1),
-            titleTextStyle: TextStyle(
-              color: Colors.white,
-              fontSize: 24,
-            ),
-            actionsIconTheme: IconThemeData(
-              color: Colors.white,
-              size: 24,
-            ),
             title: const Text("Lista de Contatos"),
-            elevation: 2,
-            toolbarHeight: 80,
-            shadowColor: Colors.blueGrey,
+            shadowColor: Colors.blueGrey.shade100,
             actions: [
               IconButton(
                 icon: const Icon(Icons.add),
@@ -87,10 +76,10 @@ class _ContactListState extends State<ContactList> {
                 },
               ),
             ],
-            scrolledUnderElevation: 8.4,
           ),
           floatingActionButton: FloatingActionButton(
             tooltip: 'Adicionar Contato',
+            backgroundColor: Colors.blueAccent,
             onPressed: () async {
               final result =
                   await Navigator.of(context).pushNamed(MyApp.CONTACT_FORM);
@@ -98,11 +87,21 @@ class _ContactListState extends State<ContactList> {
                 _loadContacts();
               }
             },
-            child: const Icon(Icons.add, size: 24),
+            child: const Icon(
+              Icons.add,
+              size: 24,
+              color: Colors.white,
+            ),
           ),
           body: Container(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.only(
+              left: 16,
+              top: 2,
+              right: 16,
+              bottom: 20,
+            ),
             child: ListView.builder(
+              shrinkWrap: true,
               itemCount: lista.length,
               itemBuilder: (context, i) => _buildContactTile(lista[i]),
             ),

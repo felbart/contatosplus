@@ -67,18 +67,18 @@ class _ContactFormState extends State<ContactForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(37, 99, 235, 1),
-        titleTextStyle: TextStyle(
-          color: Colors.white,
-          fontSize: 24,
-        ),
-        iconTheme: IconThemeData(
-          color: Colors.white,
-          size: 24,
-        ),
+        // backgroundColor: Color.fromRGBO(37, 99, 235, 1),
+        // titleTextStyle: TextStyle(
+        //   color: Colors.white,
+        //   fontSize: 24,
+        // ),
+        // iconTheme: IconThemeData(
+        //   color: Colors.white,
+        //   size: 24,
+        // ),
         title: const Text("Novo Contato"),
-        elevation: 2,
-        shadowColor: Colors.blueGrey,
+        // elevation: 2,
+        // shadowColor: Colors.blueGrey,
         actions: [
           IconButton(
             icon: const Icon(Icons.save),

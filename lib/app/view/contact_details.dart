@@ -14,18 +14,18 @@ class ContactDetails extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color.fromRGBO(37, 99, 235, 1),
-        titleTextStyle: TextStyle(
-          color: Colors.white,
-          fontSize: 24,
-        ),
-        iconTheme: IconThemeData(
-          color: Colors.white,
-          size: 24,
-        ),
+        // backgroundColor: Color.fromRGBO(37, 99, 235, 1),
+        // titleTextStyle: TextStyle(
+        //   color: Colors.white,
+        //   fontSize: 24,
+        // ),
+        // iconTheme: IconThemeData(
+        //   color: Colors.white,
+        //   size: 24,
+        // ),
         title: const Text("Detalhes do Contato"),
-        elevation: 2,
-        shadowColor: Colors.blueGrey,
+        // elevation: 2,
+        // shadowColor: Colors.blueGrey,
         actions: [
           IconButton(
             icon: const Icon(Icons.edit),
@@ -50,8 +50,8 @@ class ContactDetails extends StatelessWidget {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            Padding(padding: EdgeInsets.only(top: 60)),
             SizedBox(
               height: MediaQuery.of(context).size.height / 2,
               width: 320,
@@ -61,7 +61,12 @@ class ContactDetails extends StatelessWidget {
                   borderRadius: BorderRadius.circular(16),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.only(
+                    top: 24,
+                    left: 16,
+                    bottom: 24,
+                    right: 16,
+                  ),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -83,11 +88,18 @@ class ContactDetails extends StatelessWidget {
                       ),
                       const SizedBox(height: 8),
                       Text(
+                        "Informações do contato:",
+                        style: TextStyle(
+                          color: Colors.blueGrey.shade400,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
                         contato.telefone,
                         style: const TextStyle(fontSize: 16),
                         textAlign: TextAlign.center,
                       ),
-                      const SizedBox(height: 8),
+                      const SizedBox(height: 6),
                       Text(
                         contato.email,
                         style: const TextStyle(fontSize: 16),
