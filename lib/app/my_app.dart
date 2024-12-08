@@ -2,6 +2,7 @@ import 'package:contatos_plus/app/view/contact_details.dart';
 import 'package:contatos_plus/app/view/contact_form.dart';
 import 'package:contatos_plus/app/view/contact_list.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class MyApp extends StatelessWidget {
   // ignore: constant_identifier_names
@@ -26,6 +27,7 @@ class MyApp extends StatelessWidget {
           brightness: Brightness.light,
         ),
         useMaterial3: true,
+        textTheme: GoogleFonts.interTextTheme(Theme.of(context).textTheme),
       ),
       routes: {
         HOME: (context) => ContactList(),

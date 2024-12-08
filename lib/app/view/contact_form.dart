@@ -25,15 +25,26 @@ class _ContactFormState extends State<ContactForm> {
 
   final ImagePicker _picker = ImagePicker();
 
-  @override
-  void initState() {
-    super.initState();
+  late Contact _contact;
 
-    if (widget.contato != null) {
-      _nomeController.text = widget.contato!.nome;
-      _telefoneController.text = widget.contato!.telefone;
-      _emailController.text = widget.contato!.email;
-      _urlAvatar = File(widget.contato!.urlAvatar);
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    final contato = ModalRoute.of(context)?.settings.arguments as Contact?;
+
+    if (contato != null) {
+      _contact = contato;
+      _nomeController.text = contato.nome;
+      _telefoneController.text = contato.telefone;
+      _emailController.text = contato.email;
+
+      if (contato.urlAvatar.isNotEmpty) {
+        _urlAvatar = File(contato.urlAvatar);
+      }
+    } else {
+      _contact =
+          Contact(id: null, nome: '', email: '', telefone: '', urlAvatar: '');
     }
   }
 
@@ -43,24 +54,36 @@ class _ContactFormState extends State<ContactForm> {
     final email = _emailController.text;
     final urlAvatar = _urlAvatar?.path ?? '';
 
-    final contact = {
-      'id': widget.contato?.id,
-      'nome': nome,
-      'telefone': telefone,
-      'email': email,
-      'url_avatar': urlAvatar,
-    };
+    // Atualiza os dados no objeto _contact
+    _contact.nome = nome;
+    _contact.telefone = telefone;
+    _contact.email = email;
+    _contact.urlAvatar = urlAvatar;
 
     final dbHelper = DbHelper();
 
-    if (widget.contato != null) {
-      await dbHelper.updateContact(contact);
+    if (_contact.id != null) {
+      // Atualizar o contato existente
+      await dbHelper.updateContact({
+        'id': _contact.id,
+        'nome': _contact.nome,
+        'telefone': _contact.telefone,
+        'email': _contact.email,
+        'url_avatar': _contact.urlAvatar,
+      });
+      print('Contato atualizado com sucesso');
     } else {
-      await dbHelper.insertContact(contact);
+      // Inserir um novo contato
+      await dbHelper.insertContact({
+        'nome': _contact.nome,
+        'telefone': _contact.telefone,
+        'email': _contact.email,
+        'url_avatar': _contact.urlAvatar,
+      });
+      print('Novo contato inserido com sucesso');
     }
 
     Navigator.of(context).pop(true);
-    print('Contato salvo com sucesso');
   }
 
   @override
@@ -76,7 +99,7 @@ class _ContactFormState extends State<ContactForm> {
         //   color: Colors.white,
         //   size: 24,
         // ),
-        title: const Text("Novo Contato"),
+        title: Text(_contact.id != null ? 'Editar Contato' : 'Novo Contato'),
         // elevation: 2,
         // shadowColor: Colors.blueGrey,
         actions: [

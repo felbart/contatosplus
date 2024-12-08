@@ -1,5 +1,5 @@
 class ContactModel {
-  String id;
+  int? id;
   String nome;
   String telefone;
   String email;

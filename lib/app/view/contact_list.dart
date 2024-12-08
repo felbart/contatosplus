@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:contatos_plus/app/domain/contact.dart';
 import 'package:contatos_plus/app/domain/contact_dao.dart';
 import 'package:contatos_plus/app/my_app.dart';
@@ -53,8 +55,57 @@ class _ContactListState extends State<ContactList> {
             ),
           );
         } else if (futuro.hasData && (futuro.data?.isEmpty ?? true)) {
-          return const Scaffold(
-            body: Center(child: Text("Nenhum contato encontrado.")),
+          return Scaffold(
+            appBar: AppBar(
+              title: const Text("Lista de Contatos"),
+              shadowColor: Colors.blueGrey.shade100,
+              actions: [
+                IconButton(
+                  icon: const Icon(Icons.add),
+                  onPressed: () async {
+                    final result = await Navigator.of(context)
+                        .pushNamed(MyApp.CONTACT_FORM);
+                    if (result == true) {
+                      _loadContacts();
+                    }
+                  },
+                ),
+              ],
+            ),
+            floatingActionButton: FloatingActionButton(
+              tooltip: 'Adicionar Contato',
+              backgroundColor: Colors.blueAccent,
+              onPressed: () async {
+                final result =
+                    await Navigator.of(context).pushNamed(MyApp.CONTACT_FORM);
+                if (result == true) {
+                  _loadContacts();
+                }
+              },
+              child: const Icon(
+                Icons.add,
+                size: 24,
+                color: Colors.white,
+              ),
+            ),
+            body: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(padding: EdgeInsets.only(top: 20)),
+                Image.asset('assets/images/nenhum-contato.png'),
+                Text(
+                  "Você ainda não possui nenhum contato cadastrado.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800),
+                ),
+                Text(
+                  "Clique no botão abaixo para cadastrar um contato.",
+                  textAlign: TextAlign.center,
+                  style:
+                      TextStyle(fontSize: 16, color: Colors.blueGrey.shade400),
+                ),
+              ],
+            ),
           );
         }
 
@@ -112,9 +163,21 @@ class _ContactListState extends State<ContactList> {
   }
 
   Widget _buildContactTile(Contact contato) {
+    // final randomColor =
+    //     Colors.primaries[Random().nextInt(Colors.primaries.length)];
+
     final avatar = (contato.urlAvatar.isNotEmpty)
-        ? CircleAvatar(backgroundImage: NetworkImage(contato.urlAvatar))
-        : const CircleAvatar(child: Icon(Icons.person));
+        ? (Uri.parse(contato.urlAvatar).isAbsolute == true
+            ? CircleAvatar(
+                backgroundImage: NetworkImage(contato.urlAvatar),
+              )
+            : CircleAvatar(
+                backgroundImage: FileImage(File(contato.urlAvatar)),
+              ))
+        : CircleAvatar(
+            backgroundColor: Colors.blueAccent,
+            child: const Icon(Icons.person, color: Colors.white),
+          );
 
     return ListTile(
       leading: avatar,

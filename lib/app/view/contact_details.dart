@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:contatos_plus/app/domain/contact.dart';
 import 'package:contatos_plus/app/domain/contact_dao.dart';
 import 'package:contatos_plus/app/my_app.dart';
@@ -23,12 +25,18 @@ class ContactDetails extends StatelessWidget {
         //   color: Colors.white,
         //   size: 24,
         // ),
-        title: const Text("Detalhes do Contato"),
+        title: const Text("Detalhes do Contato",
+            style: TextStyle(
+              fontSize: 20,
+            )),
         // elevation: 2,
         // shadowColor: Colors.blueGrey,
         actions: [
           IconButton(
-            icon: const Icon(Icons.edit),
+            icon: const Icon(
+              Icons.edit,
+              size: 20,
+            ),
             onPressed: () async {
               final result = await Navigator.of(context).pushNamed(
                 MyApp.CONTACT_FORM,
@@ -41,7 +49,11 @@ class ContactDetails extends StatelessWidget {
             },
           ),
           IconButton(
-            icon: const Icon(Icons.delete),
+            icon: const Icon(
+              Icons.delete,
+              size: 20,
+              color: Colors.red,
+            ),
             onPressed: () {
               _confirmDelete(context, contato);
             },
@@ -73,10 +85,18 @@ class ContactDetails extends StatelessWidget {
                       CircleAvatar(
                         radius: 50,
                         backgroundImage: (contato.urlAvatar.isNotEmpty)
-                            ? NetworkImage(contato.urlAvatar)
+                            ? (Uri.tryParse(contato.urlAvatar)?.isAbsolute ==
+                                    true
+                                ? NetworkImage(contato.urlAvatar)
+                                : FileImage(File(contato.urlAvatar))
+                                    as ImageProvider)
+                            : null,
+                        backgroundColor: (contato.urlAvatar.isEmpty)
+                            ? Colors.blueAccent
                             : null,
                         child: (contato.urlAvatar.isEmpty)
-                            ? const Icon(Icons.person, size: 50)
+                            ? const Icon(Icons.person,
+                                size: 50, color: Colors.white)
                             : null,
                       ),
                       const SizedBox(height: 16),
@@ -106,6 +126,24 @@ class ContactDetails extends StatelessWidget {
                         textAlign: TextAlign.center,
                       ),
                       const SizedBox(height: 16),
+                      // Divider(color: Colors.blueGrey.shade100),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      //   children: [
+                      //     Flexible(
+                      //       child: FilledButton(
+                      //         onPressed: null,
+                      //         child: Text("Deletar"),
+                      //       ),
+                      //     ),
+                      //     Flexible(
+                      //       child: FilledButton(
+                      //         onPressed: null,
+                      //         child: Text("Editar"),
+                      //       ),
+                      //     ),
+                      //   ],
+                      // )
                     ],
                   ),
                 ),
