@@ -113,7 +113,38 @@ class _ContactListState extends State<ContactList> {
 
         return Scaffold(
           appBar: AppBar(
-            title: const Text("Lista de Contatos"),
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Row(
+                  children: [
+                    Image.asset(
+                      'assets/images/logo.png',
+                      width: 180,
+                    ),
+                    const SizedBox(width: 8),
+                  ],
+                ),
+                const SizedBox(height: 8), // Espaço entre logo e subtítulo
+                const Text(
+                  'Sua Lista de Contatos',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.blueGrey,
+                  ),
+                ),
+              ],
+            ),
+            bottom: PreferredSize(
+              preferredSize: const Size.fromHeight(1),
+              child: Container(
+                color: Colors.blueGrey.shade100,
+                height: 1,
+              ),
+            ),
+            toolbarHeight: 80,
             shadowColor: Colors.blueGrey.shade100,
             actions: [
               IconButton(
@@ -146,9 +177,9 @@ class _ContactListState extends State<ContactList> {
           ),
           body: Container(
             padding: EdgeInsets.only(
-              left: 16,
+              left: 8,
               top: 2,
-              right: 16,
+              right: 0,
               bottom: 20,
             ),
             child: ListView.builder(

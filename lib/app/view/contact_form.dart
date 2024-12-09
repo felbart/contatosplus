@@ -83,6 +83,9 @@ class _ContactFormState extends State<ContactForm> {
       print('Novo contato inserido com sucesso');
     }
 
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('Contato salvo com sucesso!')),
+    );
     Navigator.of(context).pop(true);
   }
 
@@ -112,6 +115,13 @@ class _ContactFormState extends State<ContactForm> {
             },
           ),
         ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Container(
+            color: Colors.blueGrey.shade100,
+            height: 1,
+          ),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

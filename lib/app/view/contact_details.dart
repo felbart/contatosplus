@@ -16,15 +16,9 @@ class ContactDetails extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        // backgroundColor: Color.fromRGBO(37, 99, 235, 1),
-        // titleTextStyle: TextStyle(
-        //   color: Colors.white,
-        //   fontSize: 24,
-        // ),
-        // iconTheme: IconThemeData(
-        //   color: Colors.white,
-        //   size: 24,
-        // ),
+        iconTheme: IconThemeData(
+          size: 24,
+        ),
         title: const Text("Detalhes do Contato",
             style: TextStyle(
               fontSize: 20,
@@ -59,6 +53,13 @@ class ContactDetails extends StatelessWidget {
             },
           ),
         ],
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Container(
+            color: Colors.blueGrey.shade100,
+            height: 1,
+          ),
+        ),
       ),
       body: Center(
         child: Column(
@@ -162,7 +163,14 @@ class ContactDetails extends StatelessWidget {
       builder: (context) {
         return AlertDialog(
           title: const Text("Excluir Contato"),
-          content: const Text("Tem certeza que deseja excluir este contato?"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Image.asset('assets/images/contato-deletado.png'),
+              const SizedBox(height: 16),
+              const Text("Tem certeza que deseja excluir este contato?"),
+            ],
+          ),
           actions: [
             TextButton(
               onPressed: () {
@@ -170,11 +178,23 @@ class ContactDetails extends StatelessWidget {
               },
               child: const Text("Cancelar"),
             ),
-            TextButton(
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.red.shade400,
+                textStyle: TextStyle(color: Colors.white),
+              ),
               onPressed: () async {
                 await ContactDaoImpl().remove(contato.id!);
                 Navigator.of(context).pop(); //fechar o dialog
-                Navigator.of(context).pop(true); //voltar a tela anterior
+                Navigator.of(context).pop(true);
+
+                ScaffoldMessenger.of(context).showSnackBar(
+                  const SnackBar(
+                    content: Text("Contato deletado com sucesso!"),
+                    duration: Duration(seconds: 2),
+                    behavior: SnackBarBehavior.floating,
+                  ),
+                ); //voltar a tela anterior
               },
               child: const Text("Excluir"),
             ),
