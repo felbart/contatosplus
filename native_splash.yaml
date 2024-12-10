@@ -1,0 +1,10 @@
+flutter_native_splash:
+  android: true
+  ios: true
+  web: false
+
+  background_image: 'assets/images/bg-splash.png'
+  image: 'assets/images/logo-splash.png'
+  branding: 'assets/images/logo-light.png'
+  branding_mode: bottom
+  branding_bottom_padding: 24

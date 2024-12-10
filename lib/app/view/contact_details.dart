@@ -181,7 +181,7 @@ class ContactDetails extends StatelessWidget {
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.red.shade400,
-                textStyle: TextStyle(color: Colors.white),
+                foregroundColor: Colors.white,
               ),
               onPressed: () async {
                 await ContactDaoImpl().remove(contato.id!);
@@ -192,7 +192,6 @@ class ContactDetails extends StatelessWidget {
                   const SnackBar(
                     content: Text("Contato deletado com sucesso!"),
                     duration: Duration(seconds: 2),
-                    behavior: SnackBarBehavior.floating,
                   ),
                 ); //voltar a tela anterior
               },
